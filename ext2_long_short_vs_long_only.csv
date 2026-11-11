@@ -1,0 +1,26 @@
+model,mode,cost_bps,total_ret_%,ann_ret_%,sharpe,max_dd_%,trades
+SVR (book),long-short,0,-29.85,-1.62,-0.06,-52.87,89
+SVR (book),long-short,10,-41.35,-2.42,-0.13,-57.23,89
+SVR (book),long-only,0,3.61,0.16,0.07,-49.98,62
+SVR (book),long-only,10,-8.56,-0.41,0.03,-50.7,62
+MLP (book NN),long-short,0,-34.28,-1.91,-0.06,-49.83,155
+MLP (book NN),long-short,10,-51.79,-3.3,-0.16,-56.26,155
+MLP (book NN),long-only,0,70.21,2.48,0.25,-38.51,104
+MLP (book NN),long-only,10,38.31,1.5,0.18,-39.99,104
+XGBoost (ext),long-short,0,-38.45,-2.21,-0.1,-50.82,65
+XGBoost (ext),long-short,10,-45.97,-2.79,-0.14,-53.39,65
+XGBoost (ext),long-only,0,-11.77,-0.57,0.01,-43.41,50
+XGBoost (ext),long-only,10,-20.22,-1.03,-0.02,-44.99,50
+RandomForest (ext),long-short,0,-23.32,-1.21,-0.02,-43.26,101
+RandomForest (ext),long-short,10,-37.37,-2.13,-0.09,-52.25,101
+RandomForest (ext),long-only,0,-6.17,-0.29,0.04,-40.81,66
+RandomForest (ext),long-only,10,-17.82,-0.9,-0.01,-42.35,66
+XGB-Classifier (ext),long-short,0,-29.86,-1.62,-0.0,-65.48,300
+XGB-Classifier (ext),long-short,10,-61.52,-4.3,-0.16,-73.9,300
+XGB-Classifier (ext),long-only,0,129.7,3.9,0.32,-56.24,227
+XGB-Classifier (ext),long-only,10,45.86,1.75,0.19,-59.13,227
+RF-Classifier (ext),long-short,0,-75.36,-6.24,-0.29,-78.93,282
+RF-Classifier (ext),long-short,10,-85.99,-8.64,-0.44,-87.36,282
+RF-Classifier (ext),long-only,0,96.96,3.17,0.28,-51.6,211
+RF-Classifier (ext),long-only,10,29.11,1.18,0.15,-54.99,211
+Buy & Hold,-,0,531.93,8.85,0.54,-56.78,1

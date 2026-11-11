@@ -1,0 +1,7 @@
+model,buy_prec,random_prec_mean,p_value_prec,sharpe_long_only,random_sharpe_mean,p_value_sharpe
+SVR (book),0.416,0.137,0.005,0.073,0.294,0.91
+MLP (book NN),0.325,0.135,0.005,0.252,0.289,0.552
+XGBoost (ext),0.37,0.137,0.005,0.015,0.265,0.92
+RandomForest (ext),0.379,0.135,0.005,0.039,0.29,0.91
+XGB-Classifier (ext),0.287,0.134,0.005,0.316,0.436,0.871
+RF-Classifier (ext),0.295,0.135,0.005,0.276,0.418,0.861

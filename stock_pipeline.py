@@ -29,7 +29,8 @@ N_FEATURES = 10
 
 
 # ---------------------------------------------------------------- 1. data
-def load_data(start, synthetic=False):
+def load_data(start, synthetic=False, cache="data/sp500.csv"):
+    import os, time
     if synthetic:
         rng = np.random.default_rng(SEED)
         n = 6000
@@ -39,12 +40,33 @@ def load_data(start, synthetic=False):
         o = np.r_[c[0], c[:-1]]
         return pd.DataFrame({"Open": o, "High": h, "Low": l, "Close": c,
                              "Volume": rng.integers(1e8, 5e8, n)}, index=idx)
-    import yfinance as yf
-    df = yf.download("^GSPC", start=start, auto_adjust=False, progress=False)
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
-    return df[["Open", "High", "Low", "Close", "Volume"]].dropna()
 
+    import yfinance as yf
+    cols = ["Open", "High", "Low", "Close", "Volume"]
+    df = None
+    for attempt in range(3):
+        try:
+            d = yf.Ticker("^GSPC").history(start=start, auto_adjust=False)
+            if d is not None and len(d) > 1000:
+                df = d
+                break
+        except Exception as e:
+            print("Download error:", e)
+        time.sleep(3)
+
+    if df is not None:
+        df = df[cols].dropna()
+        df.index = pd.to_datetime(df.index).tz_localize(None)
+        os.makedirs("data", exist_ok=True)
+        df.to_csv(cache)
+        print("Downloaded and cached to", cache)
+    elif os.path.exists(cache):
+        print("Download failed - using cached data from", cache)
+        df = pd.read_csv(cache, index_col=0, parse_dates=True)[cols].dropna()
+    else:
+        raise SystemExit("Could not download ^GSPC and no cache found at data/sp500.csv. "
+                         "Retry later, or place a CSV there (Date,Open,High,Low,Close,Volume).")
+    return df
 
 # ------------------------------------------------- 2. target (book's T)
 def make_target(df):
