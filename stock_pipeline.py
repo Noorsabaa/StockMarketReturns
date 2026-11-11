@@ -68,6 +68,13 @@ def load_data(start, synthetic=False, cache="data/sp500.csv"):
                          "Retry later, or place a CSV there (Date,Open,High,Low,Close,Volume).")
     return df
 
+
+    cols = ["Open", "High", "Low", "Close", "Volume"]
+    if os.path.exists(cache):
+        print("Using cached data from", cache, "(delete the file to re-download)")
+        return pd.read_csv(cache, index_col=0, parse_dates=True)[cols].dropna()
+
+    
 # ------------------------------------------------- 2. target (book's T)
 def make_target(df):
     c = df["Close"]
