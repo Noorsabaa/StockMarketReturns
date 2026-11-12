@@ -1,0 +1,6 @@
+,buy_prec,buy_prec,buy_prec,buy_prec,ret_%_0bps,ret_%_0bps,ret_%_0bps,ret_%_0bps,sharpe_0bps,sharpe_0bps,sharpe_0bps,sharpe_0bps,ret_%_10bps,ret_%_10bps,ret_%_10bps,ret_%_10bps,sharpe_10bps,sharpe_10bps,sharpe_10bps,sharpe_10bps
+,mean,std,min,max,mean,std,min,max,mean,std,min,max,mean,std,min,max,mean,std,min,max
+model,,,,,,,,,,,,,,,,,,,,
+MLP (book NN),0.317,0.042,0.262,0.371,14.887,40.283,-27.581,62.462,0.099,0.121,-0.043,0.233,-7.742,34.942,-41.055,34.978,0.022,0.127,-0.113,0.17
+XGB-Classifier (ext),0.289,0.006,0.284,0.3,80.808,26.03,58.148,115.294,0.246,0.04,0.211,0.297,15.248,16.746,-0.397,35.633,0.12,0.04,0.081,0.168
+XGBoost (ext),0.373,0.007,0.365,0.379,5.891,13.965,-9.409,23.365,0.081,0.049,0.025,0.141,-3.944,12.494,-17.922,11.586,0.044,0.048,-0.011,0.102

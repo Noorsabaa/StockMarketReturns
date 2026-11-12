@@ -31,6 +31,7 @@ N_FEATURES = 10
 # ---------------------------------------------------------------- 1. data
 def load_data(start, synthetic=False, cache="data/sp500.csv"):
     import os, time
+    cols = ["Open", "High", "Low", "Close", "Volume"]
     if synthetic:
         rng = np.random.default_rng(SEED)
         n = 6000
@@ -41,8 +42,13 @@ def load_data(start, synthetic=False, cache="data/sp500.csv"):
         return pd.DataFrame({"Open": o, "High": h, "Low": l, "Close": c,
                              "Volume": rng.integers(1e8, 5e8, n)}, index=idx)
 
+    # 1) frozen local copy first -> identical results for everyone
+    if os.path.exists(cache):
+        print("Using cached data from", cache, "(delete the file to re-download)")
+        return pd.read_csv(cache, index_col=0, parse_dates=True)[cols].dropna()
+
+    # 2) otherwise download once and cache
     import yfinance as yf
-    cols = ["Open", "High", "Low", "Close", "Volume"]
     df = None
     for attempt in range(3):
         try:
@@ -53,28 +59,17 @@ def load_data(start, synthetic=False, cache="data/sp500.csv"):
         except Exception as e:
             print("Download error:", e)
         time.sleep(3)
-
-    if df is not None:
-        df = df[cols].dropna()
-        df.index = pd.to_datetime(df.index).tz_localize(None)
-        os.makedirs("data", exist_ok=True)
-        df.to_csv(cache)
-        print("Downloaded and cached to", cache)
-    elif os.path.exists(cache):
-        print("Download failed - using cached data from", cache)
-        df = pd.read_csv(cache, index_col=0, parse_dates=True)[cols].dropna()
-    else:
+    if df is None:
         raise SystemExit("Could not download ^GSPC and no cache found at data/sp500.csv. "
                          "Retry later, or place a CSV there (Date,Open,High,Low,Close,Volume).")
+    df = df[cols].dropna()
+    df.index = pd.to_datetime(df.index).tz_localize(None)
+    os.makedirs("data", exist_ok=True)
+    df.to_csv(cache)
+    print("Downloaded and cached to", cache)
     return df
 
 
-    cols = ["Open", "High", "Low", "Close", "Volume"]
-    if os.path.exists(cache):
-        print("Using cached data from", cache, "(delete the file to re-download)")
-        return pd.read_csv(cache, index_col=0, parse_dates=True)[cols].dropna()
-
-    
 # ------------------------------------------------- 2. target (book's T)
 def make_target(df):
     c = df["Close"]
