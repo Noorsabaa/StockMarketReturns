@@ -1,4 +1,4 @@
-"""
+﻿"""
 DS311 PBL - Predicting Stock Market Returns (Torgo, Data Mining with R, Ch. 3)
 Baseline : book workflow (target T, indicators, RF feature selection, SVM + NN,
            walk-forward evaluation, trading simulation)
@@ -20,7 +20,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from xgboost import XGBRegressor
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore"); import os; os.makedirs("results", exist_ok=True)
 SEED = 42
 HORIZON = 10          # days ahead used by the target (book: 10)
 PCT = 0.025           # book: only moves beyond +-2.5% count
@@ -229,13 +229,13 @@ def main():
     perfdf = pd.DataFrame(perf_rows).set_index(["model", "cost_bps"]).round(2)
     print("\n=== Signal quality (precision / recall) ===\n", sigdf)
     print("\n=== Trading results ===\n", perfdf)
-    sigdf.to_csv("results_signals.csv"); perfdf.to_csv("results_trading.csv")
+    sigdf.to_csv("results/results_signals.csv"); perfdf.to_csv("results/results_trading.csv")
 
     plt.figure(figsize=(9, 5))
     for n, c in curves.items():
         plt.plot(c.index, c.values, label=n)
     plt.yscale("log"); plt.legend(); plt.title("Equity curves (no costs)")
-    plt.tight_layout(); plt.savefig("equity_curves.png", dpi=150)
+    plt.tight_layout(); plt.savefig("results/equity_curves.png", dpi=150)
 
 
 if __name__ == "__main__":

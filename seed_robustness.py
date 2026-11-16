@@ -1,4 +1,4 @@
-"""
+﻿"""
 Seed-robustness experiment (extension #6). Run AFTER extension_experiments.py works.
 Re-trains the models that use randomness with several random seeds and reports the
 spread (mean, std, min, max) of precision and long-only trading results.
@@ -16,7 +16,7 @@ from xgboost import XGBRegressor, XGBClassifier
 import stock_pipeline as sp
 import extension_experiments as ex
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore"); import os; os.makedirs("results", exist_ok=True)
 
 def factories(seed):
     xgb = dict(n_estimators=200, max_depth=3, learning_rate=0.05, subsample=0.8,
@@ -74,10 +74,10 @@ def main():
             print(f"seed {seed} | {name}: buy_prec={prec:.3f}  long-only ret={row['ret_%_0bps']:.1f}%")
 
     res = pd.DataFrame(rows)
-    res.to_csv("ext6_seed_runs.csv", index=False)
+    res.to_csv("results/ext6_seed_runs.csv", index=False)
     summ = res.drop(columns="seed").groupby("model").agg(["mean", "std", "min", "max"]).round(3)
     print("\n=== Seed robustness (long-only) ===\n", summ.T.to_string())
-    summ.to_csv("ext6_seed_robustness.csv")
+    summ.to_csv("results/ext6_seed_robustness.csv")
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-import argparse, warnings
+﻿import argparse, warnings
 import numpy as np, pandas as pd
 from scipy.stats import spearmanr
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
@@ -6,7 +6,7 @@ from sklearn.utils.class_weight import compute_sample_weight
 from xgboost import XGBClassifier
 import stock_pipeline as sp
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore"); import os; os.makedirs("results", exist_ok=True)
 pd.set_option("display.width", 200)
 pd.set_option("display.max_columns", 30)
 
@@ -106,7 +106,7 @@ def main():
         rows.append({"model": n, **m})
     e1 = pd.DataFrame(rows).set_index("model").round(3)
     print("\n=== 1. Signal quality incl. lift over base rate and rank-IC ===\n", e1)
-    e1.to_csv("ext1_signal_quality.csv")
+    e1.to_csv("results/ext1_signal_quality.csv")
 
     # ---- 2. long-short vs long-only, with/without costs
     rows, sigs = [], {}
@@ -119,7 +119,7 @@ def main():
     rows.append({"model": "Buy & Hold", "mode": "-", "cost_bps": 0, **sp.perf(bh, 1)})
     e2 = pd.DataFrame(rows).set_index(["model", "mode", "cost_bps"]).round(2)
     print("\n=== 2. Long-short vs long-only ===\n", e2)
-    e2.to_csv("ext2_long_short_vs_long_only.csv")
+    e2.to_csv("results/ext2_long_short_vs_long_only.csv")
 
     # ---- 3. threshold sensitivity (regressors; true signals fixed)
     rows = []
@@ -134,7 +134,7 @@ def main():
                          "sharpe_long_only": sp.perf(r, nt)["sharpe"]})
     e3 = pd.DataFrame(rows).set_index(["model", "pred_thr"]).round(3)
     print("\n=== 3. Threshold sensitivity (long-only) ===\n", e3)
-    e3.to_csv("ext3_threshold_sensitivity.csv")
+    e3.to_csv("results/ext3_threshold_sensitivity.csv")
 
     # ---- 4. random-signal baseline (permutation test)
     rng = np.random.default_rng(sp.SEED)
@@ -156,7 +156,7 @@ def main():
                      "p_value_sharpe": (np.sum(np.array(rs) >= act_sh) + 1) / (len(rs) + 1)})
     e4 = pd.DataFrame(rows).set_index("model").round(3)
     print("\n=== 4. Better than random? (permutation test) ===\n", e4)
-    e4.to_csv("ext4_random_baseline.csv")
+    e4.to_csv("results/ext4_random_baseline.csv")
 
     # ---- 5. sub-period robustness (long-only, no cost)
     periods = {"2005-2012": (2005, 2012), "2013-2019": (2013, 2019), "2020-end": (2020, 3000)}
@@ -170,8 +170,9 @@ def main():
             rows.append({"model": n, "period": pn, **pf})
     e5 = pd.DataFrame(rows).set_index(["model", "period"]).round(2)
     print("\n=== 5. Sub-period robustness (long-only) ===\n", e5)
-    e5.to_csv("ext5_subperiods.csv")
+    e5.to_csv("results/ext5_subperiods.csv")
 
 
 if __name__ == "__main__":
     main()
+
